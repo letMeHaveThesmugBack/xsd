@@ -10,8 +10,11 @@
 				<xs:element name="tab" minOccurs="1" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element ref="control" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:group ref="controls" minOccurs="0" maxOccurs="unbounded"/>
 						</xs:sequence>
+
+						<xs:attribute name="ref" type="xs:string" use="required"/>
+						<xs:attribute name="label" type="xs:string" default=""/>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
@@ -23,136 +26,128 @@
 		<xs:attribute name="label" type="xs:string" default=""/>
 	</xs:complexType>
 
-	<xs:element name="control" type="control" abstract="true"/>
+	<xs:group name="controls">
+		<xs:choice>
+			<xs:element name="group" type="group"/>
+			<xs:element name="label" type="label"/>
+			<xs:element name="link" type="link"/>
+			<xs:element name="text" type="text"/>
+			<xs:element name="checkbox" type="checkbox"/>
+			<xs:element name="checkedlistbox" type="checkedlistbox"/>
+			<xs:element name="radiobuttons" type="radiobuttons"/>
+			<xs:element name="datetime" type="datetime"/>
+			<xs:element name="list" type="list"/>
+			<xs:element name="reference" type="reference"/>
+			<xs:element name="color" type="color"/>
+		</xs:choice>
+	</xs:group>
 
-	<xs:element name="group" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:sequence>
-						<xs:element ref="control" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="group">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:sequence>
+					<xs:group ref="controls" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="label" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control"/>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:element name="link" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:attribute name="destination" type="xs:anyURI" default=""/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="label">
+		<xs:complexContent>
+			<xs:extension base="control"/>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="text" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:attribute name="value" type="xs:string" default=""/>
-					<xs:attribute name="length" type="xs:int" default="32"/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="link">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:attribute name="destination" type="xs:anyURI" default=""/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="checkbox" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:attribute name="checked" type="xs:boolean" default="false"/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="text">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:attribute name="value" type="xs:string" default=""/>
+				<xs:attribute name="length" type="xs:int" default="32"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="checkedlistbox" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:sequence>
-						<xs:element ref="checkbox" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="checkbox">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:attribute name="checked" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="radiobuttons" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:sequence>
-						<xs:element name="radiobutton" minOccurs="2" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:complexContent>
-									<xs:extension base="control"/>
-								</xs:complexContent>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
+	<xs:complexType name="checkedlistbox">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:sequence>
+					<xs:element name="checkbox" type="checkbox" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-					<xs:attribute name="selection" type="xs:string" default=""/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="radiobuttons">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:sequence>
+					<xs:element name="radiobutton" minOccurs="2" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="control"/>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
 
-	<xs:element name="datetime" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:attribute name="value" type="xs:dateTime" default="0001-01-01T00:00:00"/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+				<xs:attribute name="selection" type="xs:string" default=""/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="list" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:sequence>
-						<xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
+	<xs:complexType name="datetime">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:attribute name="value" type="xs:dateTime" default="0001-01-01T00:00:00"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-					<xs:attribute name="selection" type="xs:string" default=""/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="list">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:sequence>
+					<xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+
+				<xs:attribute name="selection" type="xs:string" default=""/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	
 	<!--TODO: treeview-->
 
-	<xs:element name="reference" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:attribute name="icon" type="xs:base64Binary" default=""/>
-					<xs:attribute name="text" type="xs:string" default=""/>
-					<xs:attribute name="destination" type="xs:anyURI" default=""/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="reference">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:attribute name="icon" type="xs:base64Binary" default=""/>
+				<xs:attribute name="text" type="xs:string" default=""/>
+				<xs:attribute name="destination" type="xs:anyURI" default=""/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-	<xs:element name="color" substitutionGroup="control">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="control">
-					<xs:attribute name="value" type="xs:string" default="#ffffffff"/>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xs:complexType name="color">
+		<xs:complexContent>
+			<xs:extension base="control">
+				<xs:attribute name="value" type="xs:string" default="#ffffffff"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 </xs:schema>

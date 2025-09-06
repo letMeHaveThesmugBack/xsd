@@ -7,6 +7,16 @@
 	<xs:element name="form">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dropdownlist" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="value" type="dropdownvalue" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+
+						<xs:attribute name="ref" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				
 				<xs:element name="tab" minOccurs="1" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
@@ -36,7 +46,7 @@
 			<xs:element name="checkedlistbox" type="checkedlistbox"/>
 			<xs:element name="radiobuttons" type="radiobuttons"/>
 			<xs:element name="datetime" type="datetime"/>
-			<xs:element name="list" type="list"/>
+			<xs:element name="dropdown" type="dropdown"/>
 			<xs:element name="reference" type="reference"/>
 			<xs:element name="color" type="color"/>
 		</xs:choice>
@@ -119,17 +129,22 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="list">
+	<xs:complexType name="dropdown">
 		<xs:complexContent>
 			<xs:extension base="control">
 				<xs:sequence>
-					<xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="listref" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="value" type="dropdownvalue" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-
+				
 				<xs:attribute name="selection" type="xs:string" default=""/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+
+	<xs:simpleType name="dropdownvalue">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
 	
 	<!--TODO: treeview-->
 

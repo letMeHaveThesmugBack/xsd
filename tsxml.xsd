@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://thesmug.dev/tsxml.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://thesmug.dev/tsxml.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+	<xs:element name="form">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="tab" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="control" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="control" abstract="true">
+		<xs:attribute name="ref" type="xs:string" use="required"/>
+		<xs:attribute name="label" type="xs:string" default=""/>
+	</xs:complexType>
+
+	<xs:element name="control" type="control" abstract="true"/>
+
+	<xs:element name="group" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:sequence>
+						<xs:element ref="control" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="label" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="link" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:attribute name="destination" type="xs:anyURI" default=""/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="text" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:attribute name="value" type="xs:string" default=""/>
+					<xs:attribute name="length" type="xs:int" default="32"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="checkbox" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:attribute name="checked" type="xs:boolean" default="false"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="checkedlistbox" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:sequence>
+						<xs:element ref="checkbox" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="radiobuttons" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:sequence>
+						<xs:element name="radiobutton" minOccurs="2" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="control"/>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+
+					<xs:attribute name="selection" type="xs:string" default=""/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="datetime" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:attribute name="value" type="xs:dateTime" default="0001-01-01T00:00:00"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="list" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:sequence>
+						<xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+
+					<xs:attribute name="selection" type="xs:string" default=""/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<!--TODO: treeview-->
+
+	<xs:element name="reference" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:attribute name="icon" type="xs:base64Binary" default=""/>
+					<xs:attribute name="text" type="xs:string" default=""/>
+					<xs:attribute name="destination" type="xs:anyURI" default=""/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="color" substitutionGroup="control">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="control">
+					<xs:attribute name="value" type="xs:string" default="#ffffffff"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -13,7 +13,7 @@
 							<xs:element name="value" type="dropdownvalue" minOccurs="0" maxOccurs="unbounded"/>
 						</xs:sequence>
 
-						<xs:attribute name="ref" type="xs:string" use="required"/>
+						<xs:attribute name="ref" type="xs:ID" use="required"/>
 					</xs:complexType>
 				</xs:element>
 				
@@ -23,7 +23,7 @@
 							<xs:group ref="controls" minOccurs="0" maxOccurs="unbounded"/>
 						</xs:sequence>
 
-						<xs:attribute name="ref" type="xs:string" use="required"/>
+						<xs:attribute name="ref" type="xs:ID" use="required"/>
 						<xs:attribute name="label" type="xs:string" default=""/>
 					</xs:complexType>
 				</xs:element>
@@ -32,7 +32,7 @@
 	</xs:element>
 
 	<xs:complexType name="control" abstract="true">
-		<xs:attribute name="ref" type="xs:string" use="required"/>
+		<xs:attribute name="ref" type="xs:ID" use="required"/>
 		<xs:attribute name="label" type="xs:string" default=""/>
 	</xs:complexType>
 
@@ -70,16 +70,13 @@
 
 	<xs:complexType name="link">
 		<xs:complexContent>
-			<xs:extension base="control">
-				<xs:attribute name="destination" type="xs:anyURI" default=""/>
-			</xs:extension>
+			<xs:extension base="control"/>
 		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="text">
 		<xs:complexContent>
 			<xs:extension base="control">
-				<xs:attribute name="value" type="xs:string" default=""/>
 				<xs:attribute name="length" type="xs:int" default="32"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -87,9 +84,7 @@
 
 	<xs:complexType name="checkbox">
 		<xs:complexContent>
-			<xs:extension base="control">
-				<xs:attribute name="checked" type="xs:boolean" default="false"/>
-			</xs:extension>
+			<xs:extension base="control"/>
 		</xs:complexContent>
 	</xs:complexType>
 
@@ -115,17 +110,13 @@
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
-
-				<xs:attribute name="selection" type="xs:string" default=""/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="datetime">
 		<xs:complexContent>
-			<xs:extension base="control">
-				<xs:attribute name="value" type="xs:dateTime" default="0001-01-01T00:00:00"/>
-			</xs:extension>
+			<xs:extension base="control"/>
 		</xs:complexContent>
 	</xs:complexType>
 
@@ -136,8 +127,6 @@
 					<xs:element name="listref" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="value" type="dropdownvalue" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-				
-				<xs:attribute name="selection" type="xs:string" default=""/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -150,19 +139,13 @@
 
 	<xs:complexType name="reference">
 		<xs:complexContent>
-			<xs:extension base="control">
-				<xs:attribute name="icon" type="xs:base64Binary" default=""/>
-				<xs:attribute name="text" type="xs:string" default=""/>
-				<xs:attribute name="destination" type="xs:anyURI" default=""/>
-			</xs:extension>
+			<xs:extension base="control"/>
 		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="color">
 		<xs:complexContent>
-			<xs:extension base="control">
-				<xs:attribute name="value" type="xs:string" default="#ffffffff"/>
-			</xs:extension>
+			<xs:extension base="control"/>
 		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>

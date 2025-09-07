@@ -24,7 +24,9 @@ namespace TSXMLLib
         {
             GroupBox box = new()
             {
-                Text = group.Prompt
+                Text = group.Prompt,
+                Name = group.Ref,
+                Tag = group
             };
             panel.Controls.Add(box);
 
@@ -46,7 +48,9 @@ namespace TSXMLLib
         {
             Label lbl = new()
             {
-                Text = label.Prompt
+                Text = label.Prompt,
+                Name = label.Ref,
+                Tag = label
             };
             panel.Controls.Add(lbl);
 
@@ -57,7 +61,9 @@ namespace TSXMLLib
         {
             LinkLabel lbl = new()
             {
-                Text = link.Prompt
+                Text = link.Prompt,
+                Name = link.Ref,
+                Tag = link
             };
             panel.Controls.Add(lbl);
 
@@ -69,6 +75,8 @@ namespace TSXMLLib
             TextBox box = new()
             {
                 Text = text.Prompt,
+                Name = text.Ref,
+                Tag = text,
                 MaxLength = text.Length
             };
             panel.Controls.Add(box);
@@ -80,7 +88,9 @@ namespace TSXMLLib
         {
             CheckBox box = new()
             {
-                Text = check.Prompt
+                Text = check.Prompt,
+                Name = check.Ref,
+                Tag = check
             };
             panel.Controls.Add(box);
 
@@ -91,7 +101,9 @@ namespace TSXMLLib
         {
             CheckedListBox box = new()
             {
-                Text = check.Prompt
+                Text = check.Prompt,
+                Name = check.Ref,
+                Tag = check
             };
             panel.Controls.Add(box);
 
@@ -107,7 +119,9 @@ namespace TSXMLLib
         {
             GroupBox box = new()
             {
-                Text = radiobuttons.Prompt
+                Text = radiobuttons.Prompt,
+                Name = radiobuttons.Ref,
+                Tag = radiobuttons
             };
             panel.Controls.Add(box);
 
@@ -121,7 +135,9 @@ namespace TSXMLLib
             {
                 RadioButton rb = new()
                 {
-                    Text = button.Prompt
+                    Text = button.Prompt,
+                    Name = button.Ref,
+                    Tag = button
                 };
                 subpanel.Controls.Add(rb);
             }
@@ -133,7 +149,9 @@ namespace TSXMLLib
         {
             DateTimePicker picker = new()
             {
-                Text = datetime.Prompt
+                Text = datetime.Prompt,
+                Name = datetime.Ref,
+                Tag = datetime
             };
             panel.Controls.Add(picker);
 
@@ -151,6 +169,8 @@ namespace TSXMLLib
             ComboBox box = new()
             {
                 Text = dropdown.Prompt,
+                Name = dropdown.Ref,
+                Tag = dropdown,
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             subpanel.Controls.Add(box);
@@ -179,6 +199,8 @@ namespace TSXMLLib
             LinkLabel label = new()
             {
                 Text = reference.Prompt,
+                Name = reference.Ref,
+                Tag = reference,
                 AllowDrop = true
             };
             panel.Controls.Add(label);
@@ -193,6 +215,8 @@ namespace TSXMLLib
             Button button = new()
             {
                 Text = color.Prompt,
+                Name = color.Ref,
+                Tag = color,
                 BackColor = Color.White
             };
 

@@ -1,4 +1,5 @@
-﻿using XSD = Dev.Thesmug.Tsxml.Xsd;
+﻿using WF = System.Windows.Forms;
+using XSD = Dev.Thesmug.Tsxml.Xsd;
 
 namespace TSXMLLib
 {

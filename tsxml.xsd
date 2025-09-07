@@ -33,7 +33,7 @@
 
 	<xs:complexType name="control" abstract="true">
 		<xs:attribute name="ref" type="xs:ID" use="required"/>
-		<xs:attribute name="label" type="xs:string" default=""/>
+		<xs:attribute name="prompt" type="xs:string" default=""/>
 	</xs:complexType>
 
 	<xs:group name="controls">

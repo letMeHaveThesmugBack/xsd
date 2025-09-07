@@ -131,9 +131,13 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:simpleType name="dropdownvalue">
-		<xs:restriction base="xs:string"/>
-	</xs:simpleType>
+	<xs:complexType name="dropdownvalue">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	
 	<!--TODO: treeview-->
 

@@ -9,9 +9,26 @@ namespace Dev.Thesmug.Tsxml.Xsd
         public abstract WF.Control Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel);
     }
 
+    public partial class FormTab
+    {
+        internal IEnumerable<Control> Controls => 
+            GroupProperty.Cast<Control>()
+                         .Concat(Label)
+                         .Concat(Link)
+                         .Concat(Text)
+                         .Concat(Checkbox)
+                         .Concat(Checkedlistbox)
+                         .Concat(Radiobuttons)
+                         .Concat(Datetime)
+                         .Concat(Dropdown)
+                         .Concat(Reference)
+                         .Concat(Color)
+                         .OrderBy(x => x.Ref);
+    }
+
     public partial class Group
     {
-        internal IEnumerable<Control> FlattenControls() =>
+        internal IEnumerable<Control> Controls =>
             GroupProperty.Cast<Control>()
                          .Concat(Label)
                          .Concat(Link)
@@ -43,7 +60,7 @@ namespace Dev.Thesmug.Tsxml.Xsd
             };
             box.Controls.Add(subpanel);
 
-            foreach (Control control in FlattenControls())
+            foreach (Control control in Controls)
             {
                 control.Instantiate(subpanel, viewmodel);
             }

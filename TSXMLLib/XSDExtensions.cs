@@ -1,4 +1,5 @@
-﻿using TSXMLLib;
+﻿using System.ComponentModel.Design;
+using TSXMLLib;
 using TSXMLLib.WFControls;
 using WF = System.Windows.Forms;
 
@@ -6,7 +7,53 @@ namespace Dev.Thesmug.Tsxml.Xsd
 {
     public partial class Control
     {
-        public abstract WF.Control Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel);
+        protected static readonly Font entryFont = new("Letter Gothic Std", 8.25f, FontStyle.Bold);
+
+        public virtual WF.Control? Instantiate(TableLayoutPanel panel, Viewmodel viewmodel, bool enabled = false)
+        {
+            panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            WF.Control? control = InstantiateCore(viewmodel, enabled);
+
+            WF.Label prompt = CreateStandardLabel();
+            prompt.Text = Prompt;
+
+            panel.Controls.Add(prompt, 0, panel.RowCount - 1);
+
+            if (control is not null)
+            {
+                control.Dock = DockStyle.Left;
+                panel.Controls.Add(control, 1, panel.RowCount - 1);
+            }
+
+            return control;
+        }
+
+        internal static TableLayoutPanel CreateStandardTableLayoutPanel()
+        {
+            TableLayoutPanel panel = new()
+            {
+                ColumnCount = 2,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Dock = DockStyle.Fill
+            };
+
+            panel.ColumnStyles.Add(new(SizeType.AutoSize));
+            panel.ColumnStyles.Add(new(SizeType.AutoSize));
+
+            return panel;
+        }
+
+        protected static WF.Label CreateStandardLabel() => new()
+        {
+            TextAlign = ContentAlignment.MiddleLeft,
+            AutoSize = true,
+            Dock = DockStyle.None,
+            Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom
+        };
+
+        protected abstract WF.Control? InstantiateCore(Viewmodel viewmodel, bool enabled = false);
     }
 
     public partial class FormTab
@@ -42,22 +89,25 @@ namespace Dev.Thesmug.Tsxml.Xsd
                          .Concat(Color)
                          .OrderBy(x => x.Ref);
 
-        public override GroupBox Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        public override GroupBox Instantiate(TableLayoutPanel panel, Viewmodel viewmodel, bool enabled = false)
         {
+            panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
             GroupBox box = new()
             {
                 Text = Prompt,
                 Name = Ref,
-                Tag = this
+                Tag = this,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
-            panel.Controls.Add(box);
+            panel.Controls.Add(box, 0, panel.RowCount - 1);
+            panel.SetColumnSpan(box, 2);
 
             viewmodel.Bind(this, box);
 
-            FlowLayoutPanel subpanel = new()
-            {
-                FlowDirection = FlowDirection.TopDown
-            };
+            TableLayoutPanel subpanel = CreateStandardTableLayoutPanel();
+
             box.Controls.Add(subpanel);
 
             foreach (Control control in Controls)
@@ -67,37 +117,25 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
             return box;
         }
+
+        protected override WF.Control? InstantiateCore(Viewmodel viewmodel, bool enabled = false) => null;
     }
 
     public partial class Label
     {
-        public override WF.Label Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
-        {
-            WF.Label lbl = new()
-            {
-                Text = Prompt,
-                Name = Ref,
-                Tag = this
-            };
-            panel.Controls.Add(lbl);
-
-            viewmodel.Bind(this, lbl);
-
-            return lbl;
-        }
+        protected override WF.Control? InstantiateCore(Viewmodel viewmodel, bool enabled = false) => null;
     }
 
     public partial class Link
     {
-        public override LinkLabel Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        protected override LinkLabel InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
             LinkLabel lbl = new()
             {
-                Text = Prompt,
+                Text = "TODO",
                 Name = Ref,
                 Tag = this
             };
-            panel.Controls.Add(lbl);
 
             viewmodel.Bind(this, lbl);
 
@@ -107,16 +145,50 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
     public partial class Text
     {
-        public override TextBox Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        const int maxWidth = 320;
+        const int maxHeight = 160;
+        const int widthPadding = 6;
+        const int heightPadding = 3;
+
+        protected override TextBox InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
             TextBox box = new()
             {
-                Text = Prompt,
                 Name = Ref,
                 Tag = this,
-                MaxLength = Length
+                MaxLength = Length,
+                Font = entryFont,
+                ReadOnly = !enabled
             };
-            panel.Controls.Add(box);
+
+            using (var g = WF.Form.ActiveForm?.CreateGraphics() ?? new WF.Form().CreateGraphics())
+            {
+                string sample = new('W', Length > 0 ? Length : 1);
+                int singleLineWidth = TextRenderer.MeasureText(g, sample, box.Font).Width;
+
+                if (singleLineWidth + widthPadding > maxWidth)
+                {
+                    box.Multiline = true;
+                    box.WordWrap = true;
+
+                    int multiLineHeight = box.Font.Height * (int)Math.Ceiling((double)singleLineWidth / maxWidth) + heightPadding;
+
+                    if (multiLineHeight > maxHeight)
+                    {
+                        box.Height = maxHeight;
+                        box.ScrollBars = ScrollBars.Vertical;
+                    }
+
+                    box.Width = maxWidth;
+                }
+
+                else
+                {
+                    box.Multiline = false;
+                    box.WordWrap = false;
+                    box.Width = singleLineWidth + widthPadding;
+                }
+            }
 
             viewmodel.Bind(this, box);
 
@@ -126,15 +198,16 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
     public partial class Checkbox
     {
-        public override CheckBox Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        public override string ToString() => Prompt;
+
+        protected override CheckBox InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
             CheckBox box = new()
             {
-                Text = Prompt,
                 Name = Ref,
-                Tag = this
+                Tag = this,
+                Enabled = enabled
             };
-            panel.Controls.Add(box);
 
             viewmodel.Bind(this, box);
 
@@ -144,23 +217,48 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
     public partial class Checkedlistbox
     {
-        public override CheckedListBox Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        protected override CheckedListBox InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
+            const int widthPadding = 48;
+            const int maxWidth = 320;
+
             CheckedListBox box = new()
             {
-                Text = Prompt,
                 Name = Ref,
-                Tag = this
+                Tag = this,
+                Font = entryFont
             };
-            panel.Controls.Add(box);
 
             viewmodel.Bind(this, box);
 
             foreach (Checkbox subcheck in Checkbox)
             {
                 int index = box.Items.Add(subcheck);
+                box.SelectionMode = enabled ? SelectionMode.One : SelectionMode.None;
 
                 viewmodel.Bind(subcheck, new CheckedListBoxItemDummy(box, index));
+            }
+
+            using (Graphics graphics = WF.Form.ActiveForm?.CreateGraphics() ?? new WF.Form().CreateGraphics()) // TODO: DRY (textbox uses the same code)
+            {
+                int longestStringLength = (from item
+                                           in Checkbox
+                                           orderby item.Prompt.Length descending
+                                           select item.Prompt.Length).FirstOrDefault();
+
+                string sample = new('W', longestStringLength > 0 ? longestStringLength : 1);
+                int singleLineWidth = TextRenderer.MeasureText(graphics, sample, box.Font).Width;
+
+                if (singleLineWidth + widthPadding > maxWidth)
+                {
+                    box.Width = maxWidth;
+                    box.HorizontalScrollbar = true;
+                }
+                else
+                {
+                    box.Width = singleLineWidth + widthPadding;
+                    box.HorizontalScrollbar = false;
+                }
             }
 
             return box;
@@ -169,13 +267,15 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
     public partial class Radiobuttons
     {
-        public override GroupBox Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        public override WF.Control? Instantiate(TableLayoutPanel panel, Viewmodel viewmodel, bool enabled = false)
         {
             GroupBox box = new()
             {
                 Text = Prompt,
                 Name = Ref,
-                Tag = this
+                Tag = this,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
             panel.Controls.Add(box);
 
@@ -193,7 +293,8 @@ namespace Dev.Thesmug.Tsxml.Xsd
                 {
                     Text = button.Prompt,
                     Name = button.Ref,
-                    Tag = button
+                    Tag = button,
+                    Enabled = enabled
                 };
                 subpanel.Controls.Add(rb);
 
@@ -202,19 +303,26 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
             return box;
         }
+
+        protected override WF.Control? InstantiateCore(Viewmodel viewmodel, bool enabled = false) => null;
+    }
+
+    public partial class RadiobuttonsRadiobutton
+    {
+        protected override WF.Control? InstantiateCore(Viewmodel viewmodel, bool enabled = false) => null;
     }
 
     public partial class Datetime
     {
-        public override DateTimePicker Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        protected override DateTimePicker InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
             DateTimePicker picker = new()
             {
-                Text = Prompt,
                 Name = Ref,
-                Tag = this
+                Tag = this,
+                Font = entryFont,
+                Enabled = enabled
             };
-            panel.Controls.Add(picker);
 
             viewmodel.Bind(this, picker);
 
@@ -224,20 +332,18 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
     public partial class Dropdown
     {
-        public override ComboBox Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        protected override TableLayoutPanel InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
-            FlowLayoutPanel subpanel = new()
-            {
-                FlowDirection = FlowDirection.LeftToRight
-            };
-            panel.Controls.Add(subpanel);
+            TableLayoutPanel subpanel = CreateStandardTableLayoutPanel();
 
             ComboBox box = new()
             {
-                Text = Prompt,
                 Name = Ref,
                 Tag = this,
-                DropDownStyle = ComboBoxStyle.DropDownList
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Margin = new(0, 3, 3, 3),
+                Font = entryFont,
+                Enabled = enabled
             };
             subpanel.Controls.Add(box);
 
@@ -256,7 +362,7 @@ namespace Dev.Thesmug.Tsxml.Xsd
                 }
             }
 
-            WF.Label label = new();
+            WF.Label label = CreateStandardLabel();
             subpanel.Controls.Add(label);
 
             box.SelectedIndexChanged += (s, e) =>
@@ -267,22 +373,26 @@ namespace Dev.Thesmug.Tsxml.Xsd
                 }
             };
 
-            return box;
+            return subpanel;
         }
+    }
+
+    public partial class Dropdownvalue
+    {
+        public override string ToString() => Value;
     }
 
     public partial class Reference
     {
-        public override LinkLabel Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        protected override LinkLabel InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
             LinkLabel label = new()
             {
-                Text = Prompt,
                 Name = Ref,
                 Tag = this,
                 AllowDrop = true
+                // TODO: implement handling for enabled
             };
-            panel.Controls.Add(label);
 
             viewmodel.Bind(this, label);
 
@@ -294,14 +404,14 @@ namespace Dev.Thesmug.Tsxml.Xsd
 
     public partial class Color
     {
-        public override ColorPicker Instantiate(FlowLayoutPanel panel, Viewmodel viewmodel)
+        protected override ColorPicker InstantiateCore(Viewmodel viewmodel, bool enabled = false)
         {
             ColorPicker picker = new()
             {
-                Text = Prompt,
                 Name = Ref,
                 Tag = this,
-                BackColor = System.Drawing.Color.White
+                BackColor = System.Drawing.Color.White,
+                Enabled = enabled
             };
 
             picker.Click += (s, e) =>
@@ -315,8 +425,6 @@ namespace Dev.Thesmug.Tsxml.Xsd
                     picker.BackColor = dialog.Color;
                 }
             };
-
-            panel.Controls.Add(picker);
 
             viewmodel.Bind(this, picker);
 

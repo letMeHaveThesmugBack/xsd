@@ -719,6 +719,9 @@ namespace Dev.Thesmug.Tsxml.Xsd
     public partial class Form
     {
         
+        [System.Xml.Serialization.XmlElementAttribute("associatedObject")]
+        public FormAssociatedObject AssociatedObject { get; set; }
+        
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<FormDropdownlist> _dropdownlist;
         
@@ -772,6 +775,23 @@ namespace Dev.Thesmug.Tsxml.Xsd
                 _tab = value;
             }
         }
+        
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
+        [System.Xml.Serialization.XmlAttributeAttribute("name")]
+        public string Name { get; set; }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "3.0.1185.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute("FormAssociatedObject", Namespace="http://thesmug.dev/tsxml.xsd", AnonymousType=true)]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class FormAssociatedObject
+    {
+        
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
+        [System.Xml.Serialization.XmlAttributeAttribute("ref")]
+        public string Ref { get; set; }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "3.0.1185.0")]

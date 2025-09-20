@@ -1,17 +1,17 @@
+using System.Collections.ObjectModel;
+
 namespace TSXMLEdit
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            // TODO: this should open the json files which references the xml from my website, and also have an option to make a new json from an xml either locally or from a link
+            // TODO: allow drag and drop of link onto the link option
+            // TODO: drag and drop change cursor to not allowed if the filetype is invalid for what we are dropping onto
             ApplicationConfiguration.Initialize();
-            Application.Run(new FileSelector());
+            Application.Run(new Viewer());
         }
     }
 }

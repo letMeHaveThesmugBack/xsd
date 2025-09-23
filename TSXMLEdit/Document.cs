@@ -1,5 +1,6 @@
 ﻿using Dev.Thesmug.Tsxml.Xsd;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,7 +22,10 @@ namespace TSXMLEdit
         internal ContainerControl? Content { get; private set; }
         internal ReadOnlyCollection<IReportsChanges>? ChangeReporters { get; private set; }
 
-        private static async Task<Document> CreateAsync(Func<Document, Task> loadXml, Func<Document, Task> loadNdj)
+        internal Uri? XMLFileUri { get; private set; }
+        internal Uri? NDJFileUri { get; private set; }
+
+        private static async Task<Document> CreateAsync(Func<Document, Task> loadXml, Func<Document, Task> loadNdj, CancellationToken cancellationToken)
         {
             Document doc = new();
 
@@ -34,13 +38,14 @@ namespace TSXMLEdit
             // XML not provided, but NDJ provided and has XML URI
             if (doc.XMLFile is null && doc.NDJFile is not null && doc.NDJFile.AssociatedXMLUri is Uri uri)
             {
-                await doc.LoadXML(uri);
+                await doc.LoadXML(uri, cancellationToken);
             }
 
             // XML might now have been provided
-            if (doc.XMLFile is not null && doc.XMLFile.Form is XSD.Form form)
+            if (doc.XMLFile is TSXMLFile xFile && doc.XMLFile.Form is XSD.Form form)
             {
                 doc.Title = form.AssociatedObject is not null ? $"{form.Name} - Unknown" : form.Name;
+                doc.XMLFileUri = xFile.URI ?? new(xFile.File.FullName);
 
                 Viewmodel model = doc.Model = new();
                 doc.Content = model.Render(form);
@@ -53,6 +58,8 @@ namespace TSXMLEdit
 
                     foreach (Viewmodel.Binding binding in model.Bindings.Values)
                     {
+                        if (cancellationToken.IsCancellationRequested) throw new TaskCanceledException();
+
                         if (IReportsChanges.Create(binding.WFControl) is IReportsChanges reporter)
                         {
                             changeReporters.Add(reporter);
@@ -60,34 +67,40 @@ namespace TSXMLEdit
                     }
 
                     doc.ChangeReporters = changeReporters.AsReadOnly();
+                    doc.NDJFileUri = jFile.URI ?? new(jFile.File.FullName);
                 }
             }
 
             return doc;
         }
 
-        public static Task<Document> CreateAsync(FileInfo? tsxmlFile, FileInfo? tsndjFile) =>
-            CreateAsync(doc => doc.LoadXML(tsxmlFile), doc => doc.LoadNDJ(tsndjFile));
+        public static Task<Document> CreateAsync(FileInfo? tsxmlFile, FileInfo? tsndjFile, CancellationToken cancellationToken) =>
+            CreateAsync(doc => doc.LoadXML(tsxmlFile, cancellationToken), doc => doc.LoadNDJ(tsndjFile, cancellationToken), cancellationToken);
 
-        public static Task<Document> CreateAsync(FileInfo tsxmlFile, Uri tsndjUri, DirectoryInfo? tsndjDestination = null) =>
-            CreateAsync(doc => doc.LoadXML(tsxmlFile), doc => doc.LoadNDJ(tsndjUri, tsndjDestination));
+        public static Task<Document> CreateAsync(FileInfo tsxmlFile, Uri tsndjUri, CancellationToken cancellationToken, DirectoryInfo? tsndjDestination = null) =>
+            CreateAsync(doc => doc.LoadXML(tsxmlFile, cancellationToken), doc => doc.LoadNDJ(tsndjUri, cancellationToken, tsndjDestination), cancellationToken);
 
-        public static Task<Document> CreateAsync(Uri tsxmlUri, Uri tsndjUri, DirectoryInfo? tsxmlDestination = null, DirectoryInfo? tsndjDestination = null) =>
-            CreateAsync(doc => doc.LoadXML(tsxmlUri, tsxmlDestination), doc => doc.LoadNDJ(tsndjUri, tsndjDestination));
+        public static Task<Document> CreateAsync(Uri tsxmlUri, Uri tsndjUri, CancellationToken cancellationToken, DirectoryInfo? tsxmlDestination = null, DirectoryInfo? tsndjDestination = null) =>
+            CreateAsync(doc => doc.LoadXML(tsxmlUri, cancellationToken, tsxmlDestination), doc => doc.LoadNDJ(tsndjUri, cancellationToken, tsndjDestination), cancellationToken);
 
-        public static Task<Document> CreateAsync(Uri tsxmlUri, FileInfo tsndjFile, DirectoryInfo? tsxmlDestination = null) =>
-            CreateAsync(doc => doc.LoadXML(tsxmlUri, tsxmlDestination), doc => doc.LoadNDJ(tsndjFile));
+        public static Task<Document> CreateAsync(Uri tsxmlUri, FileInfo tsndjFile, CancellationToken cancellationToken, DirectoryInfo? tsxmlDestination = null) =>
+            CreateAsync(doc => doc.LoadXML(tsxmlUri, cancellationToken, tsxmlDestination), doc => doc.LoadNDJ(tsndjFile, cancellationToken), cancellationToken);
 
-        public static Task<Document> AttachNDJAsync(Document document, FileInfo tsndjFile)
+        public static Task<Document> AttachNDJAsync(Document document, FileInfo tsndjFile, CancellationToken cancellationToken)
         {
             return document.XMLFile is TSXMLFile xml
-                ? CreateAsync(doc => doc.LoadXML(xml.File), doc => doc.LoadNDJ(tsndjFile))
-                : Task.FromResult(document);
+                ? CreateAsync(doc => doc.LoadXML(xml.File, cancellationToken), doc => doc.LoadNDJ(tsndjFile, cancellationToken), cancellationToken)
+                : Task.FromResult(document); // TODO (!URGENT!): this might not work correctly because it does it all from files, when it should do it from remote if they are defined that way. make a catch-all that auto switches if necessary UPDATE: it indeed does not work correctly! FIX ASAP
         }
 
-        private async Task LoadXML(FileInfo? file) => XMLFile = file is not null ? await ITSFileFactory<TSXMLFile>.CreateFromLocalFileAsync(file) : null;
-        private async Task LoadXML(Uri uri, DirectoryInfo? destination = null) => XMLFile = await ITSFileFactory<TSXMLFile>.CreateFromRemoteFileAsync(uri, destination);
-        private async Task LoadNDJ(FileInfo? file) => NDJFile = file is not null ? await ITSFileFactory<TSNDJFile>.CreateFromLocalFileAsync(file) : null;
-        private async Task LoadNDJ(Uri uri, DirectoryInfo? destination = null) => NDJFile = await ITSFileFactory<TSNDJFile>.CreateFromRemoteFileAsync(uri, destination);
+        public static Task<Document> ReloadAsync(Document document, CancellationToken cancellationToken)
+        {
+            return CreateAsync(doc => doc.LoadXML(document.XMLFile?.File, cancellationToken), doc => doc.LoadNDJ(document.NDJFile?.File, cancellationToken), cancellationToken); // TODO: same as above
+        }
+
+        private async Task LoadXML(FileInfo? file, CancellationToken cancellationToken) => XMLFile = file is not null ? await ITSFileFactory<TSXMLFile>.CreateFromLocalFileAsync(file, cancellationToken) : null;
+        private async Task LoadXML(Uri uri, CancellationToken cancellationToken, DirectoryInfo? destination = null) => XMLFile = await ITSFileFactory<TSXMLFile>.CreateFromRemoteFileAsync(uri, cancellationToken, destination);
+        private async Task LoadNDJ(FileInfo? file, CancellationToken cancellationToken) => NDJFile = file is not null ? await ITSFileFactory<TSNDJFile>.CreateFromLocalFileAsync(file, cancellationToken) : null;
+        private async Task LoadNDJ(Uri uri, CancellationToken cancellationToken, DirectoryInfo? destination = null) => NDJFile = await ITSFileFactory<TSNDJFile>.CreateFromRemoteFileAsync(uri, cancellationToken, destination);
     }
 }

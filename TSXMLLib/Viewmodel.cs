@@ -16,17 +16,17 @@ namespace TSXMLLib
         public record class Binding(XSD.Control XSDControl, Control WFControl);
         public record struct Serialization(string Ref, dynamic Value);
 
-        public Form? WForm { get; private set; }
-
         private readonly Dictionary<string, Binding> bindings = [];
         private readonly Dictionary<string, XSD.FormDropdownlist> dropdownLists = [];
 
         public ReadOnlyDictionary<string, Binding> Bindings { get => bindings.AsReadOnly(); }
 
-        public void SetBindingValues(ReadOnlyCollection<Serialization> serializations)
+        public void SetBindingValues(ReadOnlyCollection<Serialization> serializations) // TODO: should be async (maybe)
         {
             foreach (Serialization serialization in serializations)
             {
+                if (serialization.Ref == "\u0006") continue; // TODO: this needs to be handled more elegantly
+
                 switch (bindings[serialization.Ref].WFControl, serialization.Value)
                 {
                     case (TextBox textBox, string textBoxValue):
@@ -63,9 +63,11 @@ namespace TSXMLLib
         internal void Bind(XSD.Control xsdControl, Control wfControl) => bindings.Add(xsdControl.Ref, new(xsdControl, wfControl));
         internal XSD.FormDropdownlist GetDropdownlist(string Ref) => dropdownLists[Ref];
 
-        public string Serialize() // TODO: should be async
+        public string Serialize(Uri? associatedXMLUri = null) // TODO: should be async
         {
             StringBuilder builder = new();
+
+            if (associatedXMLUri is Uri uri) builder.AppendLine(JsonSerializer.Serialize(new Serialization("\u0006", uri), TSNDJFile.JsonOptions));
 
             foreach (KeyValuePair<string, Binding> item in bindings)
             {

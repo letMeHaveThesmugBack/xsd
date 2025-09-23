@@ -118,88 +118,97 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="w98_xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_xml.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_key_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_key_2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_file_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_file_padlock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_unknown_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_unknown_20.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="w98_file_question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_file_question.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="w2k_unknown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w2k_unknown.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="w2k_stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_stop.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_file_question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_file_question.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_message_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_message_file.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="w98_key_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_key_padlock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="w98_registration" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w98_registration.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="w2k_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_settings.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="w2k_lock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w2k_lock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_message_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_message_file.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_xml.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="w2k_write" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w2k_write.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="w2k_help" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_help.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="w2k-default_document" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w2k-default_document.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_shell_window2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_shell_window2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_media_player_stream_conn1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_media_player_stream_conn1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_network_folders" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_network_folders.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_printer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_printer.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_write_document" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_write_document.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_media_player_stream_conn1_inv" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_media_player_stream_conn1_inv.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_folder_open.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_java" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_java.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_multiple_files" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_multiple_files.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w98_key_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w98_key_padlock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="w2k_floppy_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\w2k_floppy_2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="w2k_wmp_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w2k_wmp_4.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="w98_media_player_stream_conn1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_media_player_stream_conn1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_stop.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="XMLURIRef" xml:space="preserve">
+    <value>&amp;#06;</value>
+  </data>
+  <data name="w2k_key_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_key_2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_processor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_processor.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_unknown_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_unknown_20.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_network_folders" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_network_folders.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_multiple_files" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_multiple_files.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_java" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_java.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_media_player_stream_conn1_inv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_media_player_stream_conn1_inv.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_write_document" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_write_document.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_file_padlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_file_padlock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_printer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_printer.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_settings.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_shell_window2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_shell_window2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="w2k_search_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\w2k_search_5.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="w2k_floppy_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_floppy_2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ProgramName" xml:space="preserve">
     <value>TSXMLEdit</value>
+  </data>
+  <data name="w2k_help" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_help.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w2k_folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w2k_folder_open.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="w98_xml_gear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\w98_xml_gear.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

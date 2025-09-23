@@ -55,6 +55,10 @@
             selectAllToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             optionsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator7 = new ToolStripSeparator();
+            overrideXMLURIToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator6 = new ToolStripSeparator();
+            viewOperationsToolStripMenuItem = new ToolStripMenuItem();
             cancelOperationToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
@@ -208,7 +212,7 @@
             undoToolStripMenuItem.Image = Properties.Resources.w98_media_player_stream_conn1_inv;
             undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             undoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Z;
-            undoToolStripMenuItem.Size = new Size(180, 22);
+            undoToolStripMenuItem.Size = new Size(162, 22);
             undoToolStripMenuItem.Text = "&Undo";
             undoToolStripMenuItem.Click += UndoToolStripMenuItem_Click;
             // 
@@ -217,14 +221,14 @@
             redoToolStripMenuItem.Image = Properties.Resources.w98_media_player_stream_conn1;
             redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             redoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Z;
-            redoToolStripMenuItem.Size = new Size(180, 22);
+            redoToolStripMenuItem.Size = new Size(162, 22);
             redoToolStripMenuItem.Text = "&Redo";
             redoToolStripMenuItem.Click += RedoToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(177, 6);
+            toolStripSeparator3.Size = new Size(159, 6);
             // 
             // cutToolStripMenuItem
             // 
@@ -233,7 +237,7 @@
             cutToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
-            cutToolStripMenuItem.Size = new Size(180, 22);
+            cutToolStripMenuItem.Size = new Size(162, 22);
             cutToolStripMenuItem.Text = "Cu&t";
             cutToolStripMenuItem.Click += CutToolStripMenuItem_Click;
             // 
@@ -244,7 +248,7 @@
             copyToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
-            copyToolStripMenuItem.Size = new Size(180, 22);
+            copyToolStripMenuItem.Size = new Size(162, 22);
             copyToolStripMenuItem.Text = "&Copy";
             copyToolStripMenuItem.Click += CopyToolStripMenuItem_Click;
             // 
@@ -254,27 +258,27 @@
             pasteToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             pasteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.V;
-            pasteToolStripMenuItem.Size = new Size(180, 22);
+            pasteToolStripMenuItem.Size = new Size(162, 22);
             pasteToolStripMenuItem.Text = "&Paste";
             pasteToolStripMenuItem.Click += PasteToolStripMenuItem_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(177, 6);
+            toolStripSeparator4.Size = new Size(159, 6);
             // 
             // selectAllToolStripMenuItem
             // 
             selectAllToolStripMenuItem.Image = Properties.Resources.w2k_default_document;
             selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
             selectAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.A;
-            selectAllToolStripMenuItem.Size = new Size(180, 22);
+            selectAllToolStripMenuItem.Size = new Size(162, 22);
             selectAllToolStripMenuItem.Text = "Select &All";
             selectAllToolStripMenuItem.Click += SelectAllToolStripMenuItem_Click;
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { optionsToolStripMenuItem, cancelOperationToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { optionsToolStripMenuItem, toolStripSeparator7, overrideXMLURIToolStripMenuItem, toolStripSeparator6, viewOperationsToolStripMenuItem, cancelOperationToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(45, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -285,16 +289,46 @@
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+,";
             optionsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Oemcomma;
-            optionsToolStripMenuItem.Size = new Size(203, 22);
+            optionsToolStripMenuItem.Size = new Size(223, 22);
             optionsToolStripMenuItem.Text = "&Options";
+            optionsToolStripMenuItem.Click += OptionsToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator7
+            // 
+            toolStripSeparator7.Name = "toolStripSeparator7";
+            toolStripSeparator7.Size = new Size(220, 6);
+            // 
+            // overrideXMLURIToolStripMenuItem
+            // 
+            overrideXMLURIToolStripMenuItem.Image = Properties.Resources.w98_xml_gear;
+            overrideXMLURIToolStripMenuItem.Name = "overrideXMLURIToolStripMenuItem";
+            overrideXMLURIToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.X;
+            overrideXMLURIToolStripMenuItem.Size = new Size(223, 22);
+            overrideXMLURIToolStripMenuItem.Text = "Override XML URI";
+            overrideXMLURIToolStripMenuItem.Click += OverrideXMLURIToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator6
+            // 
+            toolStripSeparator6.Name = "toolStripSeparator6";
+            toolStripSeparator6.Size = new Size(220, 6);
+            // 
+            // viewOperationsToolStripMenuItem
+            // 
+            viewOperationsToolStripMenuItem.Image = Properties.Resources.w98_processor;
+            viewOperationsToolStripMenuItem.Name = "viewOperationsToolStripMenuItem";
+            viewOperationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.T;
+            viewOperationsToolStripMenuItem.Size = new Size(223, 22);
+            viewOperationsToolStripMenuItem.Text = "View Operations";
+            viewOperationsToolStripMenuItem.Click += ViewOperationsToolStripMenuItem_Click;
             // 
             // cancelOperationToolStripMenuItem
             // 
             cancelOperationToolStripMenuItem.Image = Properties.Resources.w2k_stop;
             cancelOperationToolStripMenuItem.Name = "cancelOperationToolStripMenuItem";
             cancelOperationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.End;
-            cancelOperationToolStripMenuItem.Size = new Size(203, 22);
-            cancelOperationToolStripMenuItem.Text = "Cancel Operation";
+            cancelOperationToolStripMenuItem.Size = new Size(223, 22);
+            cancelOperationToolStripMenuItem.Text = "Abort";
+            cancelOperationToolStripMenuItem.Click += CancelOperationToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -310,8 +344,9 @@
             aboutToolStripMenuItem.Image = Properties.Resources.w2k_help;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F1;
-            aboutToolStripMenuItem.Size = new Size(151, 22);
+            aboutToolStripMenuItem.Size = new Size(180, 22);
             aboutToolStripMenuItem.Text = "&About...";
+            aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
             // StatusStrip
             // 
@@ -340,6 +375,7 @@
             XMLStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
             XMLStatusLabel.ToolTipText = "Current TSXML File";
             XMLStatusLabel.VisitedLinkColor = Color.Blue;
+            XMLStatusLabel.Click += XMLStatusLabel_Click;
             // 
             // NDJStatusLabel
             // 
@@ -357,6 +393,7 @@
             NDJStatusLabel.TextAlign = ContentAlignment.MiddleLeft;
             NDJStatusLabel.ToolTipText = "Current TSNDJ File";
             NDJStatusLabel.VisitedLinkColor = Color.Blue;
+            NDJStatusLabel.Click += NDJStatusLabel_Click;
             // 
             // ProgressBar
             // 
@@ -412,6 +449,7 @@
             MinimumSize = new Size(256, 256);
             Name = "Viewer";
             Text = "TSXMLEdit";
+            FormClosing += Viewer_FormClosing;
             ResizeBegin += Viewer_ResizeBegin;
             ResizeEnd += Viewer_ResizeEnd;
             MainMenuStrip.ResumeLayout(false);
@@ -463,5 +501,9 @@
         private OpenFileDialog OpenTSNDJFileDialog;
         private ToolStripMenuItem attachNDJToolStripMenuItem;
         private SaveFileDialog SaveNDJFileDialog;
+        private ToolStripMenuItem viewOperationsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripMenuItem overrideXMLURIToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator7;
     }
 }

@@ -21,7 +21,7 @@ namespace TSXMLLib
 
         static string ITSFileFactory<TSXMLFile>.Extension => ".tsxml";
 
-        public static async Task<TSXMLFile?> CreateFromLocalFileAsyncCore(FileInfo file)
+        public static async Task<TSXMLFile?> CreateFromLocalFileAsyncCore(FileInfo file, CancellationToken cancellationToken)
         {
             XmlSerializer serializer = new(typeof(XSD.Form));
             XmlReaderSettings settings = new()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ using TSXMLLib.WFControls;
 
 namespace TSXMLEdit
 {
-    public partial class Viewer : System.Windows.Forms.Form
+    public partial class Viewer : System.Windows.Forms.Form // TODO (GENERAL): Remove and sort usings, order function names alphabetically, add documentation
     {
         private enum FileStatus
         {
@@ -34,8 +35,13 @@ namespace TSXMLEdit
             {
                 ProgressBar.Value = ProgressBar.Minimum + ((ProgressBar.Value + ProgressBar.Step) % (ProgressBar.Maximum - ProgressBar.Minimum));
             };
+        }
 
-            Task.Run(() => PerformQueuedTasksAsync(cancellationTokenSource.Token));
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            Task.Run(PerformQueuedTasksAsync);
         }
 
         private readonly Dictionary<TabPage, Document> documents = [];
@@ -49,7 +55,7 @@ namespace TSXMLEdit
             Interval = 100
         };
         private readonly CancellationTokenSource cancellationTokenSource = new();
-        private readonly Queue<Task> tasks = new();
+        private readonly ConcurrentQueue<Task> tasks = new();
 
         internal void OnValueChanged(object? sender, EventArgs e)
         {
@@ -57,38 +63,81 @@ namespace TSXMLEdit
             SetFileStatusSymbol(FileStatus.UnsavedChanges);
         }
 
-        private void SetFileStatusSymbol(FileStatus status) => EditStateStatusLabel.Image = status switch
+        private void SetFileStatusSymbol(FileStatus status) => (EditStateStatusLabel.Image, EditStateStatusLabel.ToolTipText) = status switch
         {
-            FileStatus.NoNDJ => Resources.w98_file_question,
-            FileStatus.Locked => Resources.w98_file_padlock,
-            FileStatus.Unlocked => Resources.w98_message_file,
-            FileStatus.UnsavedChanges => Resources.w98_registration,
-            _ => Resources.w98_file_question // TODO: set these values when a new file is loaded, when a file is saved, and when a file is locked/unlocked
+            FileStatus.Locked => (Resources.w98_file_padlock, "Locked"),
+            FileStatus.Unlocked => (Resources.w98_message_file, "Unlocked"),
+            FileStatus.UnsavedChanges => (Resources.w98_registration, "Unsaved changes"),
+            _ => (Resources.w98_file_question, "No NDJ file selected"),
         };
 
-        private async Task PerformQueuedTasksAsync(CancellationToken cancellationToken)
+        private void SetURIs(Uri? xmlUri, Uri? ndjUri)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                if (tasks.Count > 0)
-                {
-                    Task task = tasks.Dequeue();
-                    ProgressBar.ToolTipText = task.ToString(); // TODO: implement task status tooltips
-                    progressBarTimer.Start();
+            XMLStatusLabel.Text = xmlUri?.AbsoluteUri ?? "None";
+            XMLStatusLabel.Tag = xmlUri;
+            NDJStatusLabel.Text = ndjUri?.AbsoluteUri ?? "None";
+            NDJStatusLabel.Tag = ndjUri;
+        }
 
+        private static void GoToURI(ToolStripStatusLabel label)
+        {
+            try
+            {
+                if (label.Tag is Uri uri)
+                {
+                    if (uri.IsFile && Path.GetDirectoryName(uri.LocalPath) is string directory && Path.Exists(directory))
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", directory);
+                    }
+
+                    else
+                    {
+                        System.Diagnostics.Process.Start(uri.AbsolutePath);
+                    }
+
+                    return;
+                }
+            }
+
+            catch { }
+
+            System.Media.SystemSounds.Hand.Play();
+        }
+
+        private async void PerformQueuedTasksAsync()
+        {
+            int workingTasks = 0;
+
+            while (true)
+            {
+                if (tasks.TryDequeue(out var task))
+                {
+                    BeginInvoke(() =>
+                    {
+                        ProgressBar.ToolTipText = "Working"; // TODO: implement list of currently running tasks
+                        if (!progressBarTimer.Enabled) progressBarTimer.Start();
+                    });
+
+                    workingTasks++;
                     await task;
+                    workingTasks--;
                 }
 
-                else
+                else if (workingTasks < 1 && progressBarTimer.Enabled)
                 {
-                    ProgressBar.ToolTipText = string.Empty;
-                    progressBarTimer.Stop();
-                    ProgressBar.Value = ProgressBar.Minimum;
+                    BeginInvoke(() =>
+                    {
+                        ProgressBar.ToolTipText = "Idle";
+                        progressBarTimer.Stop();
+                        ProgressBar.Value = ProgressBar.Minimum;
+                    });
+
+                    await Task.Delay(100);
                 }
             }
         }
 
-        private async Task AddDocument(Task<Document> creationTask)
+        private async Task AddDocumentAsync(Task<Document> creationTask)
         {
             Document doc = await creationTask;
 
@@ -126,10 +175,15 @@ namespace TSXMLEdit
             MainTabControl.TabPages.Remove(associatedTabPage);
         }
 
-        private async Task ReplaceDocument(Document original, Task<Document> creationTask)
+        private async Task ReplaceDocumentAsync(Document original, Task<Document> creationTask)
         {
             RemoveDocument(original);
-            await AddDocument(creationTask);
+            await AddDocumentAsync(creationTask);
+        }
+
+        private async Task ReloadDocumentAsync(CancellationToken cancellationToken)
+        {
+            if (currentDocument is Document doc) await ReplaceDocumentAsync(doc, Document.ReloadAsync(doc, cancellationToken));
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -145,10 +199,10 @@ namespace TSXMLEdit
                     switch (file.Extension)
                     {
                         case ".tsxml":
-                            tasks.Enqueue(AddDocument(Document.CreateAsync(file, null)));
+                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(file, null, cancellationTokenSource.Token)));
                             break;
                         case ".tsndj":
-                            tasks.Enqueue(AddDocument(Document.CreateAsync(null, file)));
+                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(null, file, cancellationTokenSource.Token)));
                             break;
                         default:
                             // TODO: warning that an invalid filetype was selected
@@ -179,6 +233,7 @@ namespace TSXMLEdit
             if (e.TabPage is TabPage tabPage)
             {
                 currentDocument = documents[e.TabPage];
+                SetURIs(currentDocument.XMLFileUri, currentDocument.NDJFileUri);
                 SetFileStatusSymbol(fileStatuses[currentDocument]);
 
                 if (currentDocument is Document doc && doc.ChangeReporters is ReadOnlyCollection<IReportsChanges> changeReporters)
@@ -206,11 +261,8 @@ namespace TSXMLEdit
                 switch (fileStatuses[doc])
                 {
                     case FileStatus.NoNDJ:
-                        if (MessageBox.Show("There is no NDJ file associated with the currently selected document. What would you like to do?",
-                        Resources.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                        {
-                            // TODO: show a window with options to create one, open local, or open remote, or cancel (instead of this dialog box)
-                        }
+                        MessageBox.Show("There is no NDJ file associated with the currently selected document.",
+                        Resources.ProgramName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     case FileStatus.Locked:
                         if (doc.ChangeReporters is not null)
@@ -238,11 +290,16 @@ namespace TSXMLEdit
                         }
 
                         break;
-                    case FileStatus.UnsavedChanges: // TODO: this doesn't work
+                    case FileStatus.UnsavedChanges:
                         if (MessageBox.Show("There are unsaved changes, would you like to save them?", Resources.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             SaveToolStripMenuItem_Click(this, new());
                             goto case FileStatus.Unlocked;
+                        }
+
+                        else
+                        {
+                            tasks.Enqueue(ReloadDocumentAsync(cancellationTokenSource.Token));
                         }
 
                         break;
@@ -265,7 +322,7 @@ namespace TSXMLEdit
             {
                 if (ndj.URI is null)
                 {
-                    File.WriteAllText(ndj.File.FullName, model.Serialize()); // TODO: should be async
+                    File.WriteAllText(ndj.File.FullName, model.Serialize(doc.XMLFile?.URI)); // TODO: should be async
                     fileStatuses[doc] = FileStatus.Unlocked;
                     SetFileStatusSymbol(FileStatus.Unlocked);
                     return;
@@ -286,7 +343,7 @@ namespace TSXMLEdit
                                       where al == FileStatus.UnsavedChanges
                                       select al).Any();
 
-            if (!anyUnsavedChanges || MessageBox.Show("There are unsaved changes. Are you sure you want to exit?", Resources.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (!anyUnsavedChanges || MessageBox.Show("There are unsaved changes. Are you sure you want to exit?", Resources.ProgramName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.OK)
             {
                 Environment.Exit(0);
             }
@@ -316,8 +373,8 @@ namespace TSXMLEdit
                 {
                     if (SaveNDJFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        File.WriteAllText(SaveNDJFileDialog.FileName, model.Serialize());
-                        tasks.Enqueue(ReplaceDocument(doc, Document.AttachNDJAsync(doc, new(SaveNDJFileDialog.FileName))));
+                        File.WriteAllText(SaveNDJFileDialog.FileName, model.Serialize(new("https://example.com"))); // TODO: this is the same as the save code, DRY
+                        tasks.Enqueue(ReplaceDocumentAsync(doc, Document.AttachNDJAsync(doc, new(SaveNDJFileDialog.FileName), cancellationTokenSource.Token)));
 
                         return;
                     }
@@ -362,13 +419,13 @@ namespace TSXMLEdit
             SafeInvokeOnActiveControl<TextBoxBase>(t => t.SelectAll());
         }
 
-        private void AttachNDJToolStripMenuItem_Click(object sender, EventArgs e) // TODO: deserialization does not appear to work. investigate asap
+        private void AttachNDJToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (currentDocument is Document doc && doc.NDJFile is null)
             {
                 if (OpenTSNDJFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    tasks.Enqueue(ReplaceDocument(doc, Document.AttachNDJAsync(doc, new(OpenTSNDJFileDialog.FileName)))); // TODO: (general) not verbose enough. not clear what specific errors are happening when something doesn't work, it's just silent. consider adding logging or error messages
+                    tasks.Enqueue(ReplaceDocumentAsync(doc, Document.AttachNDJAsync(doc, new(OpenTSNDJFileDialog.FileName), cancellationTokenSource.Token))); // TODO: (GENERAL) not verbose enough. not clear what specific errors are happening when something doesn't work, it's just silent. consider adding logging or error messages
                     return;
                 }
 
@@ -376,6 +433,48 @@ namespace TSXMLEdit
             }
 
             System.Media.SystemSounds.Hand.Play();
+        }
+
+        private void XMLStatusLabel_Click(object sender, EventArgs e)
+        {
+            GoToURI(XMLStatusLabel);
+        }
+
+        private void NDJStatusLabel_Click(object sender, EventArgs e)
+        {
+            GoToURI(NDJStatusLabel);
+        }
+
+        private void CancelOperationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            cancellationTokenSource.Cancel();
+        }
+
+        private void Viewer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ExitToolStripMenuItem_Click(sender, e);
+
+            e.Cancel = true;
+        }
+
+        private void OverrideXMLURIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: implement
+        }
+
+        private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: Implement
+        }
+
+        private void ViewOperationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: implement
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: implement
         }
 
         private void SafeInvokeOnActiveControl<T>(Action<T> action, params Func<T, bool>[] additionalConditions) where T : Control // TODO: this should be generally useful and contained in some library

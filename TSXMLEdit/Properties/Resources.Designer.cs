@@ -312,6 +312,16 @@ namespace TSXMLEdit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap w98_processor {
+            get {
+                object obj = ResourceManager.GetObject("w98_processor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap w98_registration {
             get {
                 object obj = ResourceManager.GetObject("w98_registration", resourceCulture);
@@ -336,6 +346,25 @@ namespace TSXMLEdit.Properties {
             get {
                 object obj = ResourceManager.GetObject("w98_xml", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap w98_xml_gear {
+            get {
+                object obj = ResourceManager.GetObject("w98_xml_gear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;#06;.
+        /// </summary>
+        public static string XMLURIRef {
+            get {
+                return ResourceManager.GetString("XMLURIRef", resourceCulture);
             }
         }
     }

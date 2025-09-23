@@ -183,7 +183,7 @@ namespace TSXMLEdit
 
         private async Task ReloadDocumentAsync(CancellationToken cancellationToken)
         {
-            if (currentDocument is Document doc) await ReplaceDocumentAsync(doc, Document.ReloadAsync(doc, cancellationToken));
+            if (currentDocument is Document doc) await ReplaceDocumentAsync(doc, doc.ReloadAsync(cancellationToken));
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -199,10 +199,10 @@ namespace TSXMLEdit
                     switch (file.Extension)
                     {
                         case ".tsxml":
-                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(file, null, cancellationTokenSource.Token)));
+                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(new(file.FullName), null, cancellationTokenSource.Token)));
                             break;
                         case ".tsndj":
-                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(null, file, cancellationTokenSource.Token)));
+                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(null, new(file.FullName), cancellationTokenSource.Token)));
                             break;
                         default:
                             // TODO: warning that an invalid filetype was selected
@@ -233,7 +233,7 @@ namespace TSXMLEdit
             if (e.TabPage is TabPage tabPage)
             {
                 currentDocument = documents[e.TabPage];
-                SetURIs(currentDocument.XMLFileUri, currentDocument.NDJFileUri);
+                SetURIs(currentDocument.XMLFile?.Source, currentDocument.NDJFile?.Source);
                 SetFileStatusSymbol(fileStatuses[currentDocument]);
 
                 if (currentDocument is Document doc && doc.ChangeReporters is ReadOnlyCollection<IReportsChanges> changeReporters)
@@ -320,9 +320,9 @@ namespace TSXMLEdit
                 && doc.NDJFile is TSNDJFile ndj
                 && doc.Model is Viewmodel model)
             {
-                if (ndj.URI is null)
+                if (ndj.Source.IsFile)
                 {
-                    File.WriteAllText(ndj.File.FullName, model.Serialize(doc.XMLFile?.URI)); // TODO: should be async
+                    File.WriteAllText(ndj.LocalFile.FullName, model.Serialize(doc.XMLFile?.Source)); // TODO: should be async
                     fileStatuses[doc] = FileStatus.Unlocked;
                     SetFileStatusSymbol(FileStatus.Unlocked);
                     return;
@@ -374,7 +374,7 @@ namespace TSXMLEdit
                     if (SaveNDJFileDialog.ShowDialog() == DialogResult.OK)
                     {
                         File.WriteAllText(SaveNDJFileDialog.FileName, model.Serialize(new("https://example.com"))); // TODO: this is the same as the save code, DRY
-                        tasks.Enqueue(ReplaceDocumentAsync(doc, Document.AttachNDJAsync(doc, new(SaveNDJFileDialog.FileName), cancellationTokenSource.Token)));
+                        tasks.Enqueue(ReplaceDocumentAsync(doc, doc.AttachNDJAsync(new(SaveNDJFileDialog.FileName), cancellationTokenSource.Token)));
 
                         return;
                     }
@@ -425,7 +425,7 @@ namespace TSXMLEdit
             {
                 if (OpenTSNDJFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    tasks.Enqueue(ReplaceDocumentAsync(doc, Document.AttachNDJAsync(doc, new(OpenTSNDJFileDialog.FileName), cancellationTokenSource.Token))); // TODO: (GENERAL) not verbose enough. not clear what specific errors are happening when something doesn't work, it's just silent. consider adding logging or error messages
+                    tasks.Enqueue(ReplaceDocumentAsync(doc, doc.AttachNDJAsync(new(OpenTSNDJFileDialog.FileName), cancellationTokenSource.Token))); // TODO: (GENERAL) not verbose enough. not clear what specific errors are happening when something doesn't work, it's just silent. consider adding logging or error messages
                     return;
                 }
 

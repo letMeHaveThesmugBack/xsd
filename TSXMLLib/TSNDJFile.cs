@@ -18,7 +18,7 @@ namespace TSXMLLib // TODO: (GENERAL) go through all "if x is y z" and see if it
 {
     public class TSNDJFile : TSFile, ITSFileFactory<TSNDJFile>
     {
-        private TSNDJFile(FileInfo file, ReadOnlyCollection<Serialization> objects, Uri? associatedXMLUri) : base(file)
+        private TSNDJFile(Uri source, FileInfo localFile, ReadOnlyCollection<Serialization> objects, Uri? associatedXMLUri) : base(source, localFile)
         {
             AssociatedXMLUri = associatedXMLUri;
             Objects = objects;
@@ -167,10 +167,10 @@ namespace TSXMLLib // TODO: (GENERAL) go through all "if x is y z" and see if it
             }
         }
 
-        public static async Task<TSNDJFile?> CreateFromLocalFileAsyncCore(FileInfo file, CancellationToken cancellationToken)
+        public static async Task<TSNDJFile?> CreateCoreAsync(Uri source, FileInfo localFile, CancellationToken cancellationToken)
         {
-            (ReadOnlyCollection<Serialization> serializations, Uri? uri) = await ParseAsync(file, cancellationToken);
-            return new(file, serializations, uri);
+            (ReadOnlyCollection<Serialization> serializations, Uri? uri) = await ParseAsync(localFile, cancellationToken);
+            return new(source, localFile, serializations, uri);
         }
     }
 }

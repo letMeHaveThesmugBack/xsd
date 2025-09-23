@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 
 namespace TSXMLLib
 {
-    public abstract class TSFile(FileInfo file)
+    public abstract class TSFile
     {
-        public readonly FileInfo File = file;
-        public Uri? URI { get; internal set; }
+        public readonly Uri Source;
+
+        public readonly FileInfo LocalFile;
+
+        protected TSFile(Uri source, FileInfo localFile)
+        {
+            Source = source;
+            LocalFile = localFile;
+        }
     }
 }

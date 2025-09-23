@@ -8,20 +8,24 @@ namespace TSXMLLib
 {
     public interface ITSFileFactory<T> where T : TSFile, ITSFileFactory<T>
     {
-        internal static abstract Task<T?> CreateFromLocalFileAsyncCore(FileInfo file, CancellationToken cancellationToken);
-        public static sealed async Task<T?> CreateFromLocalFileAsync(FileInfo file, CancellationToken cancellationToken) => await T.CreateFromLocalFileAsyncCore(file, cancellationToken);
-        public static sealed async Task<T?> CreateFromRemoteFileAsync(Uri uri, CancellationToken cancellationToken, DirectoryInfo? destination = null)
+        public static async Task<T?> CreateAsync(Uri source, CancellationToken cancellationToken)
         {
-            FileInfo? file = await DownloadAsync(uri, cancellationToken, destination);
-            T? result = file is not null ? await T.CreateFromLocalFileAsyncCore(file, cancellationToken) : null;
-            if (result is not null) result.URI = uri;
+            FileInfo? file = source.IsFile ? new(source.LocalPath) : await DownloadAsync(source, cancellationToken);
 
-            return result;
+            if (file is not null)
+            {
+                T? result = await T.CreateCoreAsync(source, file, cancellationToken);
+                if (result is not null) return result;
+            }
+
+            return null;
         }
+
+        internal static abstract Task<T?> CreateCoreAsync(Uri source, FileInfo localFile, CancellationToken cancellationToken);
 
         internal static abstract string Extension { get; }
 
-        internal static sealed async Task<FileInfo?> DownloadAsync(Uri uri, CancellationToken cancellationToken, DirectoryInfo? destination = null)
+        internal static sealed async Task<FileInfo?> DownloadAsync(Uri uri, CancellationToken cancellationToken)
         {
             FileInfo? file = null;
 
@@ -33,7 +37,7 @@ namespace TSXMLLib
                 string? filename = headerResponse.Content.Headers.ContentDisposition?.FileName;
                 filename ??= $"{uri!.Segments[^1]}{T.Extension}";
 
-                DirectoryInfo directory = destination ?? new(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+                DirectoryInfo directory = new(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
                 if (!directory.Exists) Directory.CreateDirectory(directory.FullName);
                 string path = Path.Combine(directory.FullName, filename);
 

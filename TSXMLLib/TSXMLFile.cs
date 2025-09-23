@@ -15,13 +15,13 @@ namespace TSXMLLib
 {
     public class TSXMLFile : TSFile, ITSFileFactory<TSXMLFile>
     {
-        private TSXMLFile(FileInfo file) : base(file) { }
+        private TSXMLFile(Uri source, FileInfo localFile) : base(source, localFile) { }
 
         public XSD.Form? Form { get; private set; }
 
         static string ITSFileFactory<TSXMLFile>.Extension => ".tsxml";
 
-        public static async Task<TSXMLFile?> CreateFromLocalFileAsyncCore(FileInfo file, CancellationToken cancellationToken)
+        public static async Task<TSXMLFile?> CreateCoreAsync(Uri source, FileInfo localFile, CancellationToken cancellationToken)
         {
             XmlSerializer serializer = new(typeof(XSD.Form));
             XmlReaderSettings settings = new()
@@ -29,13 +29,13 @@ namespace TSXMLLib
                 Async = true
             };
 
-            using StreamReader reader = new(file.FullName);
+            using StreamReader reader = new(localFile.FullName);
             using XmlReader xreader = XmlReader.Create(reader, settings);
 
             await xreader.MoveToContentAsync();
             XSD.Form? form = serializer.Deserialize(xreader) as XSD.Form;
 
-            TSXMLFile xfile = new(file)
+            TSXMLFile xfile = new(source, localFile)
             {
                 Form = form
             };

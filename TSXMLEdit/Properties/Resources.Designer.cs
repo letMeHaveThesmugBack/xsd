@@ -152,6 +152,16 @@ namespace TSXMLEdit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap w2k_old_dustbin {
+            get {
+                object obj = ResourceManager.GetObject("w2k_old_dustbin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap w2k_printer {
             get {
                 object obj = ResourceManager.GetObject("w2k_printer", resourceCulture);
@@ -235,6 +245,16 @@ namespace TSXMLEdit.Properties {
         public static System.Drawing.Bitmap w2k_write_document {
             get {
                 object obj = ResourceManager.GetObject("w2k_write_document", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap w98_directory_open_refresh {
+            get {
+                object obj = ResourceManager.GetObject("w98_directory_open_refresh", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

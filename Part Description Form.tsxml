@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form name="Part Description Form" xmlns="http://thesmug.dev/tsxml.xsd">
+	<associatedObject ref="associatedobject"/>
+	
+	<dropdownlist ref="LENGTHUOM">
+		<value description="Thousandths of an Inch">THOU</value>
+		<value description="Inches">IN</value>
+		<value description="Feet">FT</value>
+		<value description="Yards">YD</value>
+		<value description="Micrometers">UM</value>
+		<value description="Millimeters">MM</value>
+		<value description="Centimeters">CM</value>
+		<value description="Meters">M</value>
+	</dropdownlist>
+
+	<dropdownlist ref="WEIGHTUOM">
+		<value description="Pounds">LB</value>
+		<value description="Ounces">OZ</value>
+		<value description="Short Tons">TON</value>
+		<value description="Long Tons">LT</value>
+		<value description="Grams">G</value>
+		<value description="Kilograms">KG</value>
+		<value description="Metric Tons">MTON</value>
+		<value description="Ounces Troy">OZT</value>
+	</dropdownlist>
+
+	<dropdownlist ref="VOLUOM">
+		<value description="Cubic Inches">IN3</value>
+		<value description="Cubic Feet">FT3</value>
+		<value description="Cubic Yards">YD3</value>
+		<value description="Quarts">QT</value>
+		<value description="Pints">PT</value>
+		<value description="Fluid Ounces">FLOZ</value>
+		<value description="Liters">L</value>
+		<value description="Millileters">ML</value>
+		<value description="Cubic Meters">M3</value>
+	</dropdownlist>
+
+	<dropdownlist ref="ENDCONN">
+		<value description="Attachment Weld (Pipe Sleeves)">AWLD</value>
+		<value description="Butt Weld">BW</value>
+		<value description="Clamp">CL</value>
+		<value description="Compression Fitting (Bite Type)">CFBT</value>
+		<value description="Face Seal (Union Threadpiece or Tailpiece)">FS</value>
+		<value description="Face Seal with O-Ring Groove (Union Threadpiece or Tailpiece">FSG</value>
+		<value description="Female Flare">FFLR</value>
+		<value description="Female Hose Flex">FHF</value>
+		<value description="Female Hose Thread">FHT</value>
+		<value description="Female NPT">FNPT</value>
+		<value description="Female NPTF">FPTF</value>
+		<value description="Female Silver Braze">FSB</value>
+		<value description="Female Socket Weld">SW</value>
+		<value description="Female Straight Thread">FSTR</value>
+		<value description="Female Swivel">FSWV</value>
+		<value description="Flat Face Flange">FFF</value>
+		<value description="Flat Face Gasket">FFG</value>
+		<value description="Flexitalic Gasket for Raised Face Flange">FXGF</value>
+		<value description="Hose">HOSE</value>
+		<value description="Hose Barb">BARB</value>
+		<value description="Male Flare">MFLR</value>
+		<value description="Male Hose Flex">MHF</value>
+		<value description="Male Hose Thread">MHT</value>
+		<value description="Male NPT">MNPT</value>
+		<value description="Male NPTF">MPTF</value>
+		<value description="Male Silver Braze">MSB</value>
+		<value description="Male Socket Weld">MSW</value>
+		<value description="Male Straight Thread">MSTR</value>
+		<value description="Male Swivel">MSWV</value>
+		<value description="Mechanically Attached">MA</value>
+		<value description="No End Preparation">X</value>
+		<value description="Quick Disconnect">QD</value>
+		<value description="Raised Face Flange">RFF</value>
+		<value description="Raised Face Flange with O-Ring Groove">RFFG</value>
+		<value description="Root Weld (Boss, Boss Assembly, Olets)">ROOT</value>
+		<value description="Seal Weld (Valve or Component Seal Weld)">SEAL</value>
+		<value description="Spigot">SPGT</value>
+		<value description="Square Flat Face Flange with O-Ring Groove">SFFG</value>
+		<value description="Square Flat Face Flange">SFFF</value>
+	</dropdownlist>
+	
+	<tab name="General" ref="general">
+		<dropdown prompt="Release Level" ref="releaselevel" priority="700">
+			<value description="In Work">I</value>
+			<value description="Released for Procurement">R</value>
+			<value description="Not for New Development">N</value>
+			<value description="Obsolete with Replacement">O</value>
+			<value description="Obsolete with No Replacement">X</value>
+		</dropdown>
+
+		<reference prompt="Replacement" ref="replacement" priority="690"/>
+
+		<group prompt="Name" ref="name" priority="1000">
+			<text prompt="Noun" ref="noun" length="16" priority="1000"/>
+			<text prompt="Type" ref="type" length="16" priority="0"/>
+			<text prompt="Modifier" ref="modifier" length="16" priority="-1000"/>
+		</group>
+
+		<text prompt="Description" ref="description" length="4096" priority="999"/>
+
+		<text prompt="Modifications" ref="modifications" length="4096" priority="998"/>
+
+		<text prompt="Material" ref="material" length="16" priority="990"/>
+		
+		<!--TODO: make list that shows as a list (list object is actually a dropdown) use with Document and Document Data fields. more generally allow a list of elements that can be added to for things like equivalents etc-->
+
+		<dropdown prompt="Procurement" ref="procurement" priority="800">
+			<value description="Make">M</value>
+			<value description="Buy">B</value>
+			<value description="Make or Buy">O</value>
+		</dropdown>
+
+		<dropdown prompt="Unit of Measure" ref="uom" priority="980">
+			<listref>LENGTHUOM</listref>
+			<listref>WEIGHTUOM</listref>
+			<listref>VOLUOM</listref>
+			<value description="Piece">PC</value>
+		</dropdown>
+
+		<checkedlistbox prompt="Inspection" ref="inspection">
+			<checkbox prompt="Visual (VT)" ref="vt"/>
+			<checkbox prompt="Magnetic Particle (MT)" ref="mt"/>
+			<checkbox prompt="Liquid Penetrant (PT)" ref="pt"/>
+			<checkbox prompt="Verification of Material (VM)" ref="vm"/>
+			<checkbox prompt="Ultrasonic Test (UT)" ref="ut"/>
+			<checkbox prompt="Radiographic Test (RT)" ref="rt"/>
+			<checkbox prompt="HAZMAT" ref="hazmat"/>
+			<checkbox prompt="Radioactive" ref="radioactive"/>
+		</checkedlistbox>
+
+		<group prompt="Dimensions" ref="dimensions" priority="880">
+			<text prompt="Length" ref="length" length="16" priority="10"/>
+			<dropdown prompt="Length UOM" ref="lengthuom" priority="9">
+				<listref>LENGTHUOM</listref>
+			</dropdown>
+			
+			<text prompt="Width" ref="width" length="16" priority="8"/>
+			<dropdown prompt="Width UOM" ref="widthuom" priority="7">
+				<listref>LENGTHUOM</listref>
+			</dropdown>
+			
+			<text prompt="Height/Thickness" ref="height" length="16" priority="6"/>
+			<dropdown prompt="Height/Thickness UOM" ref="heightuom" priority="5">
+				<listref>LENGTHUOM</listref>
+			</dropdown>
+			
+			<text prompt="Outside Diameter" ref="od" length="16" priority="4"/>
+			<dropdown prompt="Outside Diameter UOM" ref="oduom" priority="3">
+				<listref>LENGTHUOM</listref>
+			</dropdown>
+			
+			<text prompt="Inside Diameter" ref="id" length="16" priority="2"/>
+			<dropdown prompt="Inside Diameter UOM" ref="iduom" priority="1">
+				<listref>LENGTHUOM</listref>
+			</dropdown>
+		</group>
+
+		<checkbox prompt="Assembly Required" ref="assemblyrequired"/>
+	</tab>
+
+	<tab name="Piping" ref="piping">
+		<group prompt="Ratings" ref="ratings" priority="1">
+			<text prompt="Pressure Rating" ref="pressurerating" length="16" priority="1000"/>
+			<dropdown prompt="Pressure Rating UOM" ref="pressureratinguom" priority="900">
+				<value description="Pounds per Square Inch">PSI</value>
+				<value description="Thousands of Pounds per Square Inch">KSI</value>
+				<value>BAR</value>
+				<value description="Pascal">PA</value>
+				<value description="Kilopascal">KPA</value>
+				<value description="Megapascal">MPA</value>
+				<value description="Inches of Water">INH2O</value>
+				<value description="Feet of Water">FTH2O</value>
+				<value description="Atmospheres">ATM</value>
+				<value description="Millimeters of Mercury">MMHG</value>
+				<value description="Inches of Mercury">INHG</value>
+				<value>TORR</value>
+				<value description="Millibar">MBAR</value>
+			</dropdown>
+			
+			<text prompt="Temperature Rating" ref="temperaturerating" length="16" priority="800"/>
+			<dropdown prompt="Temperature Rating UOM" ref="temperatureratinguom" priority="700">
+				<value description="Degrees Farenheit">F</value>
+				<value description="Degrees Celcius">C</value>
+				<value description="Rankine">R</value>
+				<value description="Kelvin">K</value>
+			</dropdown>
+		</group>
+
+		<group prompt="End Connections" ref="endconnections">
+			<group prompt="End Connection A" ref="endconnectiona">
+				<dropdown prompt="End Connection A Type" ref="endconnectionatype" priority="1000">
+					<listref>ENDCONN</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Size A" ref="nominalsizea" length="16" priority="999"/>
+				<dropdown prompt="Nominal Size A UOM" ref="nominalsizeauom" priority="998">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Wall Thickness A" ref="nominalwallthicknessa" length="16" priority="997"/>
+				<dropdown prompt="Nominal Wall Thickness A UOM" ref="nominalwallthicknessauom" priority="996">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Outside Diameter A" ref="outsidediametera" length="16" priority="995"/>
+				<dropdown prompt="Outside Diameter A UOM" ref="outsidediameterauom" priority="994">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Inside Diameter A" ref="insidediametera" length="16" priority="993"/>
+				<dropdown prompt="Inside Diameter A UOM" ref="insidediameterauom" priority="992">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Schedule or Class A" ref="scheduleclassa" length="16" priority="991"/>
+				
+				<text prompt="Primary Connection Material A" ref="primaryconnectionmateriala" length="16" priority="990"/>
+				
+				<text prompt="Socket Depth A" ref="socketdeptha" length="16" priority="989"/>
+				<dropdown prompt="Socket Depth A UOM" ref="socketdepthauom" priority="988">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Tangent Length A" ref="tangentlengtha" length="16" priority="987"/>
+				<dropdown prompt="Tangent Length A UOM" ref="tangentlengthauom" priority="986">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Number of Bolt Holes A" ref="numberofboltholesa" length="16" priority="985"/>
+				
+				<text prompt="Bolt Hole Diameter A" ref="boltholediametera" length="16" priority="984"/>
+				<dropdown prompt="Bolt Hole Diameter A UOM" ref="boltholediameterauom" priority="983">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Bolt Circle Diameter A" ref="boltcirclediametera" length="16" priority="982"/>
+				<dropdown prompt="Bolt Circle Diameter A UOM" ref="boltcirclediameterauom" priority="981">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+			</group>
+
+			<group prompt="End Connection B" ref="endconnectionb">
+				<dropdown prompt="End Connection B Type" ref="endconnectionbtype">
+					<listref>ENDCONN</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Size B" ref="nominalsizeb" length="16"/>
+				<dropdown prompt="Nominal Size B UOM" ref="nominalsizebuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Wall Thickness B" ref="nominalwallthicknessb" length="16"/>
+				<dropdown prompt="Nominal Wall Thickness B UOM" ref="nominalwallthicknessbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Outside Diameter B" ref="outsidediameterb" length="16"/>
+				<dropdown prompt="Outside Diameter B UOM" ref="outsidediameterbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Inside Diameter B" ref="insidediameterb" length="16"/>
+				<dropdown prompt="Inside Diameter B UOM" ref="insidediameterbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Schedule or Class B" ref="scheduleclassb" length="16"/>
+				
+				<text prompt="Primary Connection Material B" ref="primaryconnectionmaterialb" length="16"/>
+				
+				<text prompt="Socket Depth B" ref="socketdepthb" length="16"/>
+				<dropdown prompt="Socket Depth B UOM" ref="socketdepthbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Tangent Length B" ref="tangentlengthb" length="16"/>
+				<dropdown prompt="Tangent Length B UOM" ref="tangentlengthbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Number of Bolt Holes B" ref="numberofboltholesb" length="16"/>
+				
+				<text prompt="Bolt Hole Diameter B" ref="boltholediameterb" length="16"/>
+				<dropdown prompt="Bolt Hole Diameter B UOM" ref="boltholediameterbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Bolt Circle Diameter B" ref="boltcirclediameterb" length="16"/>
+				<dropdown prompt="Bolt Circle Diameter B UOM" ref="boltcirclediameterbuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+			</group>
+
+			<group prompt="End Connection C" ref="endconnectionc">
+				<dropdown prompt="End Connection C Type" ref="endconnectionctype">
+					<listref>ENDCONN</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Size C" ref="nominalsizec" length="16"/>
+				<dropdown prompt="Nominal Size C UOM" ref="nominalsizecuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Wall Thickness C" ref="nominalwallthicknessc" length="16"/>
+				<dropdown prompt="Nominal Wall Thickness C UOM" ref="nominalwallthicknesscuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Outside Diameter C" ref="outsidediameterc" length="16"/>
+				<dropdown prompt="Outside Diameter C UOM" ref="outsidediametercuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Inside Diameter C" ref="insidediameterc" length="16"/>
+				<dropdown prompt="Inside Diameter C UOM" ref="insidediametercuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Schedule or Class C" ref="scheduleclassc" length="16"/>
+				
+				<text prompt="Primary Connection Material C" ref="primaryconnectionmaterialc" length="16"/>
+				
+				<text prompt="Socket Depth C" ref="socketdepthc" length="16"/>
+				<dropdown prompt="Socket Depth C UOM" ref="socketdepthcuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Tangent Length C" ref="tangentlengthc" length="16"/>
+				<dropdown prompt="Tangent Length C UOM" ref="tangentlengthcuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Number of Bolt Holes C" ref="numberofboltholesc" length="16"/>
+				
+				<text prompt="Bolt Hole Diameter C" ref="boltholediameterc" length="16"/>
+				<dropdown prompt="Bolt Hole Diameter C UOM" ref="boltholediametercuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Bolt Circle Diameter C" ref="boltcirclediameterc" length="16"/>
+				<dropdown prompt="Bolt Circle Diameter C UOM" ref="boltcirclediametercuom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+			</group>
+
+			<group prompt="End Connection D" ref="endconnectiond">
+				<dropdown prompt="End Connection D Type" ref="endconnectiondtype">
+					<listref>ENDCONN</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Size D" ref="nominalsized" length="16"/>
+				<dropdown prompt="Nominal Size D UOM" ref="nominalsizeduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Nominal Wall Thickness D" ref="nominalwallthicknessd" length="16"/>
+				<dropdown prompt="Nominal Wall Thickness D UOM" ref="nominalwallthicknessduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Outside Diameter D" ref="outsidediameterd" length="16"/>
+				<dropdown prompt="Outside Diameter D UOM" ref="outsidediameterduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Inside Diameter D" ref="insidediameterd" length="16"/>
+				<dropdown prompt="Inside Diameter D UOM" ref="insidediameterduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Schedule or Class D" ref="scheduleclassd" length="16"/>
+				
+				<text prompt="Primary Connection Material D" ref="primaryconnectionmateriald" length="16"/>
+				
+				<text prompt="Socket Depth D" ref="socketdepthd" length="16"/>
+				<dropdown prompt="Socket Depth D UOM" ref="socketdepthduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Tangent Length D" ref="tangentlengthd" length="16"/>
+				<dropdown prompt="Tangent Length D UOM" ref="tangentlengthduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Number of Bolt Holes D" ref="numberofboltholesd" length="16"/>
+				
+				<text prompt="Bolt Hole Diameter D" ref="boltholediameterd" length="16"/>
+				<dropdown prompt="Bolt Hole Diameter D UOM" ref="boltholediameterduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+				
+				<text prompt="Bolt Circle Diameter D" ref="boltcirclediameterd" length="16"/>
+				<dropdown prompt="Bolt Circle Diameter D UOM" ref="boltcirclediameterduom">
+					<listref>LENGTHUOM</listref>
+				</dropdown>
+			</group>
+		</group>
+	</tab>
+</form>

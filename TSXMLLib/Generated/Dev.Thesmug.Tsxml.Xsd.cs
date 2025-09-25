@@ -53,6 +53,23 @@ namespace Dev.Thesmug.Tsxml.Xsd
                 _prompt = value;
             }
         }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private int _priority = 0;
+        
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        [System.Xml.Serialization.XmlAttributeAttribute("priority")]
+        public int Priority
+        {
+            get
+            {
+                return _priority;
+            }
+            set
+            {
+                _priority = value;
+            }
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "3.0.1185.0")]

@@ -20,7 +20,34 @@ namespace TSXMLEdit
         public TSXMLFile? XMLFile { get; private set; }
         public TSNDJFile? NDJFile { get; private set; }
         internal ContainerControl? Content { get; private set; }
-        internal ReadOnlyCollection<IReportsChanges>? ChangeReporters { get; private set; }
+        internal ReadOnlyCollection<IReportsChanges>? ChangeReporters
+        {
+            get => _changeReporters;
+
+            private set
+            {
+                _changeReporters = value;
+
+                if (value is not null)
+                {
+                    changeReporterAssociations.Clear();
+
+                    foreach (IReportsChanges changeReporter in value)
+                    {
+                        changeReporterAssociations.Add(changeReporter.GetControl(), changeReporter);
+                    }
+                }
+            }
+        }
+        private ReadOnlyCollection<IReportsChanges>? _changeReporters;
+
+        private readonly Dictionary<System.Windows.Forms.Control, IReportsChanges> changeReporterAssociations = [];
+
+        internal IReportsChanges? GetChangeReporter(System.Windows.Forms.Control control)
+        {
+            changeReporterAssociations.TryGetValue(control, out IReportsChanges? changeReporter);
+            return changeReporter;
+        }
 
         public static async Task<Document> CreateAsync(Uri? tsxmlSource, Uri? tsndjSource, CancellationToken cancellationToken)
         {
@@ -31,7 +58,7 @@ namespace TSXMLEdit
             };
 
             // XML not provided, but NDJ provided and has XML URI
-            if (doc.XMLFile is null && doc.NDJFile is not null && doc.NDJFile.AssociatedXMLUri is Uri uri) await doc.AttachXMLAsync(uri, cancellationToken);
+            if (doc.XMLFile is null && doc.NDJFile is not null && doc.NDJFile.AssociatedXMLUri is Uri uri) doc = await doc.AttachXMLAsync(uri, cancellationToken);
 
             // XML might now have been provided
             if (doc.XMLFile is not null && doc.XMLFile.Form is XSD.Form form)

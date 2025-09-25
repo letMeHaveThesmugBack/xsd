@@ -70,7 +70,8 @@ namespace Dev.Thesmug.Tsxml.Xsd
                          .Concat(Dropdown)
                          .Concat(Reference)
                          .Concat(Color)
-                         .OrderBy(x => x.Ref);
+                         .OrderByDescending(x => x.Priority)
+                         .ThenBy(x => x.Ref); // TODO: make reusable (same code repeated elsewhere)
     }
 
     public partial class Group
@@ -87,7 +88,8 @@ namespace Dev.Thesmug.Tsxml.Xsd
                          .Concat(Dropdown)
                          .Concat(Reference)
                          .Concat(Color)
-                         .OrderBy(x => x.Ref);
+                         .OrderByDescending(x => x.Priority)
+                         .ThenBy(x => x.Ref);
 
         public override GroupBox Instantiate(TableLayoutPanel panel, Viewmodel viewmodel, bool enabled = false)
         {
@@ -370,6 +372,11 @@ namespace Dev.Thesmug.Tsxml.Xsd
                 if (box.SelectedItem is Dropdownvalue value)
                 {
                     label.Text = value.Description;
+                }
+
+                else
+                {
+                    label.Text = string.Empty;
                 }
             };
 

@@ -37,6 +37,16 @@ namespace TSXMLEdit
             };
         }
 
+        public Viewer(string[] args) : this()
+        {
+            string? file = args.Length > 0 ? args[0] : null;
+
+            if (file is not null)
+            {
+                OpenToolStripMenuItem_Click(this, EventArgs.Empty);
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -140,6 +150,15 @@ namespace TSXMLEdit
         private async Task AddDocumentAsync(Task<Document> creationTask)
         {
             Document doc = await creationTask;
+
+            if (doc.ChangeReporters is ReadOnlyCollection<IReportsChanges> changeReporters)
+            {
+                foreach (IReportsChanges changeReporter in changeReporters)
+                {
+                    Control control = changeReporter.GetControl();
+                    if (control is not TextBoxBase) control.ContextMenuStrip = clearContextMenuStrip;
+                }
+            }
 
             TabPage page = new()
             {
@@ -475,6 +494,27 @@ namespace TSXMLEdit
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // TODO: implement
+        }
+
+        private void ResetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ActiveControl is Control ac && currentDocument?.GetChangeReporter(ac) is IReportsChanges changeReporter)
+            {
+                changeReporter.Reset(sender, e);
+            }
+        }
+
+        private void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tasks.Enqueue(ReloadDocumentAsync(cancellationTokenSource.Token));
+        }
+
+        private void ClearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentDocument is not null && clearContextMenuStrip.SourceControl is Control source && currentDocument.GetChangeReporter(source) is IReportsChanges changeReporter)
+            {
+                changeReporter.Reset(sender, e);
+            }
         }
 
         private void SafeInvokeOnActiveControl<T>(Action<T> action, params Func<T, bool>[] additionalConditions) where T : Control // TODO: this should be generally useful and contained in some library

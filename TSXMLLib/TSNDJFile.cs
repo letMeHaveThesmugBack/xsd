@@ -66,7 +66,7 @@ namespace TSXMLLib // TODO: (GENERAL) go through all "if x is y z" and see if it
                         {
                             dynamic? value = JsonSerializer.Deserialize(valueProperty.GetRawText(), type, options);
 
-                            return new(Ref, valueProperty);
+                            return new(Ref, value);
                         }
                     }
                 }

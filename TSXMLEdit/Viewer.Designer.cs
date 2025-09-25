@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Viewer));
             MainMenuStrip = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openToolStripMenuItem = new ToolStripMenuItem();
             openRemoteToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator = new ToolStripSeparator();
+            refreshToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator8 = new ToolStripSeparator();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
@@ -47,6 +50,8 @@
             editToolStripMenuItem = new ToolStripMenuItem();
             undoToolStripMenuItem = new ToolStripMenuItem();
             redoToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator9 = new ToolStripSeparator();
+            resetToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             cutToolStripMenuItem = new ToolStripMenuItem();
             copyToolStripMenuItem = new ToolStripMenuItem();
@@ -71,8 +76,11 @@
             MainTabControl = new TabControl();
             OpenTSNDJFileDialog = new OpenFileDialog();
             SaveNDJFileDialog = new SaveFileDialog();
+            clearContextMenuStrip = new ContextMenuStrip(components);
+            clearToolStripMenuItem = new ToolStripMenuItem();
             MainMenuStrip.SuspendLayout();
             StatusStrip.SuspendLayout();
+            clearContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // MainMenuStrip
@@ -87,7 +95,7 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, openRemoteToolStripMenuItem, toolStripSeparator, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator5, attachNDJToolStripMenuItem, lockUnlockToolStripMenuItem, toolStripSeparator1, printToolStripMenuItem, printPreviewToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, openRemoteToolStripMenuItem, toolStripSeparator, refreshToolStripMenuItem, toolStripSeparator8, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator5, attachNDJToolStripMenuItem, lockUnlockToolStripMenuItem, toolStripSeparator1, printToolStripMenuItem, printPreviewToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
             fileToolStripMenuItem.Font = new Font("Microsoft Sans Serif", 8.25F);
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(35, 20);
@@ -116,6 +124,20 @@
             // 
             toolStripSeparator.Name = "toolStripSeparator";
             toolStripSeparator.Size = new Size(200, 6);
+            // 
+            // refreshToolStripMenuItem
+            // 
+            refreshToolStripMenuItem.Image = Properties.Resources.w98_directory_open_refresh;
+            refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            refreshToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
+            refreshToolStripMenuItem.Size = new Size(203, 22);
+            refreshToolStripMenuItem.Text = "Refresh";
+            refreshToolStripMenuItem.Click += RefreshToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator8
+            // 
+            toolStripSeparator8.Name = "toolStripSeparator8";
+            toolStripSeparator8.Size = new Size(200, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -201,7 +223,7 @@
             // 
             // editToolStripMenuItem
             // 
-            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator3, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator4, selectAllToolStripMenuItem });
+            editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator9, resetToolStripMenuItem, toolStripSeparator3, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator4, selectAllToolStripMenuItem });
             editToolStripMenuItem.Font = new Font("Microsoft Sans Serif", 8.25F);
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new Size(37, 20);
@@ -212,7 +234,7 @@
             undoToolStripMenuItem.Image = Properties.Resources.w98_media_player_stream_conn1_inv;
             undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             undoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Z;
-            undoToolStripMenuItem.Size = new Size(162, 22);
+            undoToolStripMenuItem.Size = new Size(185, 22);
             undoToolStripMenuItem.Text = "&Undo";
             undoToolStripMenuItem.Click += UndoToolStripMenuItem_Click;
             // 
@@ -221,14 +243,28 @@
             redoToolStripMenuItem.Image = Properties.Resources.w98_media_player_stream_conn1;
             redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             redoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Z;
-            redoToolStripMenuItem.Size = new Size(162, 22);
+            redoToolStripMenuItem.Size = new Size(185, 22);
             redoToolStripMenuItem.Text = "&Redo";
             redoToolStripMenuItem.Click += RedoToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator9
+            // 
+            toolStripSeparator9.Name = "toolStripSeparator9";
+            toolStripSeparator9.Size = new Size(182, 6);
+            // 
+            // resetToolStripMenuItem
+            // 
+            resetToolStripMenuItem.Image = Properties.Resources.w2k_old_dustbin;
+            resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            resetToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.X;
+            resetToolStripMenuItem.Size = new Size(185, 22);
+            resetToolStripMenuItem.Text = "Clear Field";
+            resetToolStripMenuItem.Click += ResetToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(159, 6);
+            toolStripSeparator3.Size = new Size(182, 6);
             // 
             // cutToolStripMenuItem
             // 
@@ -237,7 +273,7 @@
             cutToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
-            cutToolStripMenuItem.Size = new Size(162, 22);
+            cutToolStripMenuItem.Size = new Size(185, 22);
             cutToolStripMenuItem.Text = "Cu&t";
             cutToolStripMenuItem.Click += CutToolStripMenuItem_Click;
             // 
@@ -248,7 +284,7 @@
             copyToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
-            copyToolStripMenuItem.Size = new Size(162, 22);
+            copyToolStripMenuItem.Size = new Size(185, 22);
             copyToolStripMenuItem.Text = "&Copy";
             copyToolStripMenuItem.Click += CopyToolStripMenuItem_Click;
             // 
@@ -258,21 +294,21 @@
             pasteToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             pasteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.V;
-            pasteToolStripMenuItem.Size = new Size(162, 22);
+            pasteToolStripMenuItem.Size = new Size(185, 22);
             pasteToolStripMenuItem.Text = "&Paste";
             pasteToolStripMenuItem.Click += PasteToolStripMenuItem_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(159, 6);
+            toolStripSeparator4.Size = new Size(182, 6);
             // 
             // selectAllToolStripMenuItem
             // 
             selectAllToolStripMenuItem.Image = Properties.Resources.w2k_default_document;
             selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
             selectAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.A;
-            selectAllToolStripMenuItem.Size = new Size(162, 22);
+            selectAllToolStripMenuItem.Size = new Size(185, 22);
             selectAllToolStripMenuItem.Text = "Select &All";
             selectAllToolStripMenuItem.Click += SelectAllToolStripMenuItem_Click;
             // 
@@ -344,7 +380,7 @@
             aboutToolStripMenuItem.Image = Properties.Resources.w2k_help;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F1;
-            aboutToolStripMenuItem.Size = new Size(180, 22);
+            aboutToolStripMenuItem.Size = new Size(151, 22);
             aboutToolStripMenuItem.Text = "&About...";
             aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
@@ -437,6 +473,19 @@
             SaveNDJFileDialog.DefaultExt = "tsndj";
             SaveNDJFileDialog.Filter = "TSNDJ Files|*.tsndj|All files|*.*";
             // 
+            // clearContextMenuStrip
+            // 
+            clearContextMenuStrip.Items.AddRange(new ToolStripItem[] { clearToolStripMenuItem });
+            clearContextMenuStrip.Name = "clearContextMenuStrip";
+            clearContextMenuStrip.Size = new Size(181, 48);
+            // 
+            // clearToolStripMenuItem
+            // 
+            clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            clearToolStripMenuItem.Size = new Size(180, 22);
+            clearToolStripMenuItem.Text = "Clear";
+            clearToolStripMenuItem.Click += ClearToolStripMenuItem_Click;
+            // 
             // Viewer
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -456,6 +505,7 @@
             MainMenuStrip.PerformLayout();
             StatusStrip.ResumeLayout(false);
             StatusStrip.PerformLayout();
+            clearContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -465,7 +515,6 @@
         private MenuStrip MainMenuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem openToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
@@ -505,5 +554,12 @@
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripMenuItem overrideXMLURIToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator7;
+        private ToolStripMenuItem resetToolStripMenuItem;
+        private ToolStripMenuItem refreshToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator8;
+        private ToolStripSeparator toolStripSeparator9;
+        private ToolStripSeparator toolStripSeparator;
+        private ContextMenuStrip clearContextMenuStrip;
+        private ToolStripMenuItem clearToolStripMenuItem;
     }
 }

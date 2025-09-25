@@ -23,24 +23,32 @@ namespace TSXMLLib
 
         public static async Task<TSXMLFile?> CreateCoreAsync(Uri source, FileInfo localFile, CancellationToken cancellationToken)
         {
-            XmlSerializer serializer = new(typeof(XSD.Form));
-            XmlReaderSettings settings = new()
+            try
             {
-                Async = true
-            };
+                XmlSerializer serializer = new(typeof(XSD.Form));
+                XmlReaderSettings settings = new()
+                {
+                    Async = true
+                };
 
-            using StreamReader reader = new(localFile.FullName);
-            using XmlReader xreader = XmlReader.Create(reader, settings);
+                using StreamReader reader = new(localFile.FullName);
+                using XmlReader xreader = XmlReader.Create(reader, settings);
 
-            await xreader.MoveToContentAsync();
-            XSD.Form? form = serializer.Deserialize(xreader) as XSD.Form;
+                await xreader.MoveToContentAsync();
+                XSD.Form? form = serializer.Deserialize(xreader) as XSD.Form;
 
-            TSXMLFile xfile = new(source, localFile)
+                TSXMLFile xfile = new(source, localFile)
+                {
+                    Form = form
+                };
+
+                return xfile;
+            }
+
+            catch
             {
-                Form = form
-            };
-
-            return xfile;
+                return null; // TODO: handle errors
+            }
         }
     }
 }

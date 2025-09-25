@@ -2,7 +2,7 @@
 
 [Setup]
 AppName=TSXMLEdit
-AppVersion=0.0.0.0
+AppVersion=0.0.0.1
 DefaultDirName={pf}\TSXMLEdit
 DefaultGroupName=TSXMLEdit
 UninstallDisplayIcon={app}\TSXMLEdit.exe

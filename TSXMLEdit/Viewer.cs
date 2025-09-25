@@ -43,7 +43,8 @@ namespace TSXMLEdit
 
             if (file is not null)
             {
-                OpenToolStripMenuItem_Click(this, EventArgs.Empty);
+                Collection<FileInfo> files = [new(file)];
+                OpenFiles(files);
             }
         }
 
@@ -212,21 +213,25 @@ namespace TSXMLEdit
                 IEnumerable<FileInfo> files = from filename
                                               in OpenFileDialog.FileNames
                                               select new FileInfo(filename);
+                OpenFiles(files);
+            }
+        }
 
-                foreach (FileInfo file in files)
+        private void OpenFiles(IEnumerable<FileInfo> files)
+        {
+            foreach (FileInfo file in files)
+            {
+                switch (file.Extension)
                 {
-                    switch (file.Extension)
-                    {
-                        case ".tsxml":
-                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(new(file.FullName), null, cancellationTokenSource.Token)));
-                            break;
-                        case ".tsndj":
-                            tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(null, new(file.FullName), cancellationTokenSource.Token)));
-                            break;
-                        default:
-                            // TODO: warning that an invalid filetype was selected
-                            break;
-                    }
+                    case ".tsxml":
+                        tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(new(file.FullName), null, cancellationTokenSource.Token)));
+                        break;
+                    case ".tsndj":
+                        tasks.Enqueue(AddDocumentAsync(Document.CreateAsync(null, new(file.FullName), cancellationTokenSource.Token)));
+                        break;
+                    default:
+                        // TODO: warning that an invalid filetype was selected
+                        break;
                 }
             }
         }
